@@ -1,6 +1,4 @@
-import random
-
-
+import random, copy
 # ■
 
 
@@ -73,8 +71,11 @@ def esta_cheio():
 	return True
 
 
-x = random.randint(0, altura - 1)
-y = random.randint(0, largura - 1)
+r = random.choice([(0, 10), (40, largura - 1)])
+s = random.choice([(0, 10), (40, altura - 1)])
+
+x = random.randint(*s)
+y = random.randint(*r)
 
 posicoes1 = [[x, y]]
 posicoes2 = []
@@ -111,7 +112,7 @@ def anda(x, y):
 	global endx, endy
 
 	menor = matrix[x][y]
-	matrix[x][y] = "x"
+	matrix[x][y] = Bcolors.FAIL + "•" + Bcolors.ENDC
 
 	for x_index, m in enumerate(matrix[x - 1:x + 2]):
 		for y_index, n in enumerate(m[y - 1:y + 2]):
@@ -124,16 +125,24 @@ def anda(x, y):
 	endy = y + (novoy - 1)
 
 
-gera_obstaculos(10)
+gera_obstaculos(30)
 
 while not esta_cheio():
 	propaga(posicoes1, posicoes2)
 	propaga(posicoes2, posicoes1)
 
-endx = random.randint(1, altura - 2)
-endy = random.randint(1, largura - 2)
+r = random.choice([(0, 10), (40, largura - 2)])
+s = random.choice([(0, 10), (40, altura - 2)])
+
+endx = random.randint(*s)
+endy = random.randint(*r)
+final_x = copy.deepcopy(endx)
+final_y = copy.deepcopy(endy)
 
 while matrix[endx][endy] != 0:
 	anda(endx, endy)
+
+matrix[x][y] = Bcolors.OKBLUE + "■" + Bcolors.ENDC
+matrix[final_x][final_y] = Bcolors.OKBLUE + "■" + Bcolors.ENDC
 
 print_matrix()
